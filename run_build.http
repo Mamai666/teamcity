@@ -1,0 +1,101 @@
+GET http://admin:admin@localhost:8111/app/rest/builds
+Accept: application/json
+
+###
+
+### GET info project
+GET http://admin:admin@localhost:8111/app/rest/projects
+Accept: application/json
+
+### GET info build
+GET http://admin:admin@localhost:8111/app/rest/buildTypes
+Accept: application/json
+
+
+### 0.GET Token
+GET http://localhost:8111/authenticationTest.html?csrf
+Accept: application/json
+
+
+### 1.Create project
+POST http://localhost:8111/app/rest/projects
+Content-Type: application/json
+Accept: application/json
+X-TC-CSRF-Token: 3a54faf6-c4f2-4d71-9b04-925aa04387d7
+
+{
+  "parentProject": {
+    "locator": "_Root"
+  },
+  "name": "Projectname",
+  "id": "idId",
+  "copyAllAssociatedSettings": true
+}
+
+### 2.Create build config
+POST http://localhost:8111/app/rest/buildTypes
+Content-Type: application/json
+Accept: application/json
+X-TC-CSRF-Token: 3a54faf6-c4f2-4d71-9b04-925aa04387d7
+
+{
+  "id": "BuildConfId",
+  "name": "BuildConfName",
+  "project": {
+    "id": "idId"
+  },
+  "steps": {
+    "step": [
+      {
+        "name": "myCommandLineStep",
+        "type": "simpleRunner",
+        "properties": {
+          "property": [
+            {
+              "name": "script.content",
+              "value": "echo 'Hello World!'"
+            },
+            {
+              "name": "teamcity.step.mode",
+              "value": "default"
+            },
+            {
+              "name": "use.custom.script",
+              "value": "true"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
+
+
+### 3. Start project
+POST http://admin:admin@localhost:8111/app/rest/buildQueue
+Content-Type: application/json
+Accept: application/json
+X-TC-CSRF-Token: 3a54faf6-c4f2-4d71-9b04-925aa04387d7
+
+{
+  "buildType": {
+    "id": "BuildConfId"
+  }
+}
+
+### 4. Get status build
+GET http://admin:admin@localhost:8111/app/rest/builds
+Content-Type: application/json
+Accept: application/json
+
+
+###Delete project
+DELETE http://admin:admin@localhost:8111/app/rest/projects/id:simpleprojectID2
+X-TC-CSRF-Token: a3d4c988-22c7-43ef-ba15-519c5a0dedb5
+Accept: application/json
+
+### GET info build
+GET http://admin:admin@localhost:8111/app/rest/builds/id:x1CB9jBu52Q
+Accept: application/json
+
+
